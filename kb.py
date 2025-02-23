@@ -146,3 +146,11 @@ def status_kb(id):
     kb.add(b2)
     kb.add(b3)
     return kb
+
+def answer_kb(id):
+    kb = InlineKeyboardMarkup()
+    b = InlineKeyboardButton(text='Ответить', callback_data=f'answer_{id}')
+    b1 = InlineKeyboardButton(text='⬅️ Назад', callback_data='reviews')
+    kb.add(b)
+    kb.add(b1)
+    return kb

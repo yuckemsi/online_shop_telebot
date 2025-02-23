@@ -124,14 +124,26 @@ def handle_callbacks(call):
 		bot.send_message(msg.chat.id, 'Напишите вопрос ниже')
 		bot.register_next_step_handler(msg, add_question)
 
-#HELP FUNCTION
+	elif call.data.startswith('answer_'):
+		bot.delete_message(msg.chat.id, msg.message_id)
+		bot.answer_callback_query(call.id)
+		tg_id = call.data.split('_')[1]
+		bot.send_message(msg.chat.id, 'Напишите ваш ответ')
+		bot.register_next_step_handler(msg, answer, tg_id)
+
+#HELP FUNCTIONS
 
 def add_question(msg):
 	db.add_question(msg.chat.id, msg.text)
 	bot.send_message(msg.chat.id, 'Ваш вопрос успешно отправлен!\n\nЖдите ответ от администратора', reply_markup=kb.main_kb(msg.chat.id))
 	admins = db.get_admins()
 	for admin in admins:
-		bot.send_message(admin[0], f'Вопрос от {msg.chat.first_name}:\n\n{msg.text}', reply_markup=kb.answer_kb(msg.chat.id))
+		bot.send_message(admin[1], f'Вопрос от {msg.chat.first_name}:\n\n{msg.text}', reply_markup=kb.answer_kb(msg.chat.id))
+
+def answer(msg, tg_id):
+	db.delete_help(tg_id)
+	bot.send_message(tg_id, 'Ответ от администратора:\n\n' + msg.text)
+	bot.send_message(msg.chat.id, 'Ответ успешно отправлен!', reply_markup=kb.admin_kb())
 
 #REVIEW FUNCTION
 
@@ -140,7 +152,7 @@ def review(msg):
 	bot.send_message(msg.chat.id, 'Спасибо за отзыв!', reply_markup=kb.main_kb(msg.chat.id))
 	admins = db.get_admins()
 	for admin in admins:
-		bot.send_message(admin[0], f'Отзыв от {msg.chat.first_name}:\n\n{msg.text}', reply_markup=kb.answer_kb(msg.chat.id))
+		bot.send_message(admin[1], f'Отзыв от {msg.chat.first_name}:\n\n{msg.text}', reply_markup=kb.admin_kb())
 #ORDER FUNCTIONS
 
 def get_recipient(msg, product_id):

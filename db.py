@@ -189,3 +189,7 @@ class DataBase():
 	def delete_order(self, id):
 		cur.execute('DELETE FROM orders WHERE id = ?', (id,))
 		db.commit()
+
+	def delete_help(self, id):
+		cur.execute('DELETE FROM help WHERE tg_id = ?', (id,))
+		db.commit()
