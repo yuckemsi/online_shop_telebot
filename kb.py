@@ -18,14 +18,12 @@ def main_kb(tg_id):
 
     if admin is True:
         b1 = InlineKeyboardButton(text='Товары', callback_data='products')
-        b2 = InlineKeyboardButton(text='Поддержка⚙', callback_data='help')
-        b3 = InlineKeyboardButton(text='Админ-панель', callback_data='admin')
-        b4 = InlineKeyboardButton(text='Отзывы', callback_data='reviews')
+        b2 = InlineKeyboardButton(text='Админ-панель', callback_data='admin')
+        b3 = InlineKeyboardButton(text='Отзывы', callback_data='reviews')
 
         kb.add(b1)
         kb.add(b2)
         kb.add(b3)
-        kb.add(b4)
 
     return kb
 
